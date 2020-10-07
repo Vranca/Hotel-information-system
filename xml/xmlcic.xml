@@ -1,0 +1,1715 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database xmlns="http://www.example.org/xml-db" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Backend" xsi:schemaLocation="http://www.example.org/xml-db xml-db.xsd">
+    <connection address="78.28.157.8" database="PIS2020" database_type="MsSQL" password="EtfPIS2020G63648" port="default" schema="pisg6" username="EtfPIS2020G6"/>
+    <login tablecode="REGISTAR_KORISNIKA" loginProcedure="usp_RegistarKorisnikaLogin(?,?)"/>
+    <privileges tablecode="Dozvole" privilegesProcedure="usp_DozvoleReadAll(?)"/>
+        <package name="Aplikativna Podrska">
+        <package name="Administracija Korisnika">
+            <table code="REGISTAR_KORISNIKA" name="Registar korisnika">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM" />
+                    <references refColumn="POS_PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="KOR_ID" group="0" name="Identifikacija" nullable="false" primary="true" size="40" type="varchar(40)"/>
+                <column code="ZAR_IDENT" group="0" name="Redni broj evidencije" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="ZAR_IDENT" refTable="REGISTAR_ZAPOSLENIH"/>
+                </column>
+                <column code="FL_IDENTIFIKATOR" group="0" name="Identifikator Fizickih Lica" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="FL_IDENTIFIKATOR" refTable="EVIDENCIJA_FIZICKIH_LICA"/>
+                </column>
+                <column code="Grupa_Oznaka" group="0" name="Oznaka Grupe Korisnika" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="Grupa_Oznaka" refTable="Grupe Korisnika"/>
+                </column>
+                <column code="PL_PS_IDENTIFIKATOR" group="0" name="Identifikator Pravnog Lica" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="KOR_DATREG" group="0" name="Datum registracije" nullable="false" primary="false" size="" type="datetime"/>
+                <column code="KOR_DO" group="0" name="Do" nullable="true" primary="false" size="" type="datetime"/>
+                <column code="KOR_LOZINKA" group="0" name="Lozinka" nullable="true" primary="false" size="120" type="varchar(120)"/>
+                <column code="KOR_TAJNA_REC" group="0" name="Tajna reč" nullable="true" primary="false" size="120" type="varchar(120)"/>
+                <column code="KOR_BLOKIRAN" group="0" name="Blokiran?" nullable="false" primary="false" size="" type="bit"/>
+                <crud>
+                    <create name="usp_RegistarKorisnikaCreate(?,?,?,?,?,?,?,?,?,?,?)"/>
+                    <retrieve name="usp_RegistarKorisnikaRead(?,?)"/>
+                    <retrieveAll name="usp_RegistarKorisnikaReadAll(?)"/>
+                    <update name="usp_RegistarKorisnikaUpdate(?,?,?,?,?,?,?,?,?,?,?)"/>
+                    <delete name="usp_RegistarKorisnikaDelete(?,?)"/>
+                    <retrieveRefValue name="usp_RegistarKorisnikaReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="EVICDENCIJA_SESIJA" name="Evicdencija sesija">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="LOG_DATUM_I_VREME" group="0" name="Datum i vreme" nullable="false" primary="true" size="" type="datetime"/>
+                <column code="LOG_DENT_KLJUC" group="0" name="Ident ključ" nullable="false" primary="true" size="" type="int"/>
+                <column code="REG_PS_IDENTIFIKATOR" group="0" name="Reg_Identifikator Poslovnog Sistema" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="REGISTAR_KORISNIKA"/>
+                </column>
+                <column code="KOR_ID" group="0" name="Identifikacija" nullable="true" primary="false" size="40" type="varchar(40)">
+                    <references refColumn="KOR_ID" refTable="REGISTAR_KORISNIKA"/>
+                </column>
+                <column code="LOG_DATKR" group="0" name="Sesija završena" nullable="true" primary="false" size="" type="datetime"/>
+                <column code="LOG_SESION_OBJECT" group="0" name="Sesion object" nullable="true" primary="false" size="7000" type="varchar(7000)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="EVIDENTIRANJE_AKCIJA" name="Evidentiranje akcija">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="EVICDENCIJA_SESIJA"/>
+                </column>
+                <column code="LOG_DATUM_I_VREME" group="0" name="Datum i vreme" nullable="false" primary="true" size="" type="datetime">
+                    <references refColumn="LOG_DATUM_I_VREME" refTable="EVICDENCIJA_SESIJA"/>
+                </column>
+                <column code="LOG_DENT_KLJUC" group="0" name="Ident ključ" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="LOG_DENT_KLJUC" refTable="EVICDENCIJA_SESIJA"/>
+                </column>
+                <column code="SAKC_IDENTIFIKATOR" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int"/>
+                <column code="AKC_AKCIJA" group="0" name="Akcija" nullable="false" primary="false" size="3" type="char(3)">
+                    <references refColumn="AKC_AKCIJA" refTable="REGISTAR_AKCIJA"/>
+                </column>
+                <column code="SAKC_TIMESTAMP" group="0" name="Vremenski marker" nullable="true" primary="false" size="" type="datetime"/>
+                <column code="SAKC_ACTION_OBJECT" group="0" name="Action object" nullable="true" primary="false" size="3000" type="varchar(3000)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                   
+                    <update/>
+                    <delete/>
+                   
+                </crud>
+            </table>
+            <table code="REGISTAR_AKCIJA" name="Registar akcija">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="AKC_AKCIJA" group="0" name="Akcija" nullable="false" primary="true" size="3" type="char(3)"/>
+                <column code="AKC_NAZIV_AKCIJE" group="0" name="Naziv akcije" nullable="false" primary="false" size="80" type="varchar(80)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                      <retrieveRefValue name="usp_RegistarAkcijaReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="Grupe Korisnika" name="Grupe Korisnika">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="Grupa_Oznaka" group="0" name="Oznaka Grupe Korisnika" nullable="false" primary="true" size="" type="int"/>
+                <column code="Naziv Grupe" group="0" name="Naziv Grupe" nullable="false" primary="false" size="100" type="varchar(100)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                    <retrieveRefValue name ="usp_GrupeKorisnikaReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="SIstem ili podsistem" name="SIstem ili podsistem">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="Sis_Oznaka" group="0" name="Oznaka Sistema" nullable="false" primary="true" size="" type="int"/>
+                <column code="Sis_Naziv" group="0" name="Naziv" nullable="false" primary="false" size="100" type="varchar(100)"/>
+                <column code="Sis_Kod" group="0" name="Kod" nullable="false" primary="false" size="30" type="varchar(30)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                     <retrieveRefValue name="usp_SistemIliPodsistemReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="Dozvole" name="Dozvole">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="Grupa_Oznaka" group="0" name="Oznaka Grupe Korisnika" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="Grupa_Oznaka" refTable="Grupe Korisnika"/>
+                </column>
+                <column code="AKC_AKCIJA" group="0" name="Akcija" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="AKC_AKCIJA" refTable="REGISTAR_AKCIJA"/>
+                </column>
+                <column code="Sis_Oznaka" group="0" name="Oznaka Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="Sis_Oznaka" refTable="SIstem ili podsistem"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <retrieveAll name="usp_DozvoleReadAll(?)"/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="PRIPADNICI_GRUPNE_REGISTRACIJE" name="Pripadnici grupne registracije">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="POS_PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema Fizickih Lica" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="POS_PS_IDENTIFIKATOR" refTable="EVIDENCIJA_FIZICKIH_LICA"/>
+                </column>
+                <column code="FL_IDENTIFIKATOR" group="0" name="Identifikator Fizickih Lica" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="FL_IDENTIFIKATOR" refTable="EVIDENCIJA_FIZICKIH_LICA"/>
+                </column>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="REGISTAR_KORISNIKA"/>
+                </column>
+                <column code="KOR_ID" group="0" name="Identifikacija" nullable="false" primary="true" size="40" type="varchar(40)">
+                    <references refColumn="KOR_ID" refTable="REGISTAR_KORISNIKA"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+        </package>
+    </package>
+
+    <package name="Tehnologija Procesa Rada">
+        <package name="Upravljanje Hotelom">
+            <package name="Dodatne Usluge">
+                <table code="Dodatne usluge" name="Dodatne usluge">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="false" primary="true" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="du_oznaka" group="0" name="Oznaka Dodatne Usluge" nullable="false" primary="true" size="5" type="varchar(5)"/>
+                    <column code="tdu_oznaka" group="0" name="Oznaka tipa dodatne usluge" nullable="false" primary="false" size="5" type="varchar(5)">
+                        <references refColumn="tdu_oznaka" refTable="Tip dodatne usluge"/>
+                    </column>
+                    <column code="du_naziv" group="0" name="naziv" nullable="false" primary="false" size="20" type="varchar(20)"/>
+                    <column code="du_opis" group="0" name="opis" nullable="true" primary="false" size="" type="text"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Sadrzajne Dodatne Usluge" name="Sadrzajne Dodatne Usluge">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="OBJ_OJ_OZNAKA" group="0" name="Oznaka jedinice Objedinjene Usluge" nullable="false" primary="true" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="Dodatne usluge"/>
+                    </column>
+                    <column code="OBJ_du_oznaka" group="0" name="Oznaka Objedinjene Dodatne Usluge" nullable="false" primary="true" size="5" type="varchar(5)">
+                        <references refColumn="du_oznaka" refTable="Dodatne usluge"/>
+                    </column>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="Dodatne usluge"/>
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="Dodatne usluge"/>
+                    </column>
+                    <column code="SAD_OJ_OZNAKA" group="0" name="Oznaka jedinice Sadrzane Usluge" nullable="false" primary="true" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="Dodatne usluge"/>
+                    </column>
+                    <column code="SAD_du_oznaka" group="0" name="Oznaka Sadrzane Dodatne Usluge" nullable="false" primary="true" size="5" type="varchar(5)">
+                        <references refColumn="du_oznaka" refTable="Dodatne usluge"/>
+                    </column>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Tip dodatne usluge" name="Tip dodatne usluge">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="tdu_oznaka" group="0" name="Oznaka" nullable="false" primary="true" size="5" type="varchar(5)"/>
+                    <column code="tdu_naziv" group="0" name="Naziv" nullable="false" primary="false" size="20" type="varchar(20)"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+            </package>
+            <package name="Ponuda Usluga">
+                <table code="Cjenovnik Ponuda" name="Cjenovnik Ponuda">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Oznaka Cjenovnika" group="0" name="Oznaka Cjenovnika" nullable="false" primary="true" size="" type="int"/>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="false" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="false" primary="false" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="Pon_Usl_Oznaka" group="0" name="Oznaka Ponude Usluga" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="Pon_Usl_Oznaka" refTable="Ponuda Usluga"/>
+                    </column>
+                    <column code="vras_oznaka" group="0" name="Oznaka Vremenskog Rasporeda" nullable="false" primary="false" size="5" type="varchar(5)">
+                        <references refColumn="vras_oznaka" refTable="Vremenski raspored"/>
+                    </column>
+                    <column code="Cje_Pon_Cijena" group="0" name="Cijena" nullable="true" primary="false" size="" type="float"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Dodatne oprema" name="Dodatne oprema">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="do_oznaka" group="0" name="Oznaka Dodatne Opreme" nullable="false" primary="true" size="" type="bigint"/>
+                    <column code="to_oznaka" group="0" name="Oznaka Tipa Opreme" nullable="false" primary="false" size="5" type="varchar(5)">
+                        <references refColumn="to_oznaka" refTable="Tip opreme"/>
+                    </column>
+                    <column code="do_naziv" group="0" name="naziv" nullable="false" primary="false" size="20" type="varchar(20)"/>
+                    <column code="do_opis" group="0" name="opis" nullable="true" primary="false" size="" type="text"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <retrieveAll name="usp_DodatneOpremaReadAll()"/>
+                        <update/>
+                        <delete/>
+                        <retrieveRefValue name="usp_DodatneOpremaReadRefValue(?)"/>
+                    </crud>
+                </table>
+                <table code="Ponuda Usluga" name="Ponuda Usluga">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Pon_Usl_Oznaka" group="0" name="Oznaka Ponude Usluga" nullable="false" primary="true" size="" type="int"/>
+                    <column code="DU_OJ_OZNAKA" group="0" name="Oznaka jedinice Dodatne Usluge" nullable="true" primary="false" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="du_oznaka" group="0" name="Oznaka Dodatne Usluge" nullable="true" primary="false" size="5" type="varchar(5)">
+                        <references refColumn="du_oznaka" refTable="Dodatne usluge"/>
+                    </column>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="false" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                    </column>
+                    <column code="SMJ_OJ_OZNAKA" group="0" name="Oznaka jedinice Smjestaja" nullable="true" primary="false" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="sj_oznaka_smjestajne" group="0" name="Oznaka smjestajne jedinice" nullable="true" primary="false" size="5" type="numeric(5)">
+                        <references refColumn="sj_oznaka_smjestajne" refTable="Smještajna jedinica"/>
+                    </column>
+                    <column code="vras_oznaka" group="0" name="Oznaka Vremenskog Rasporeda" nullable="true" primary="false" size="5" type="varchar(5)">
+                        <references refColumn="vras_oznaka" refTable="Vremenski raspored"/>
+                    </column>
+                    <column code="Tip_Pon_Oznaka" group="0" name="Oznaka Tipa Ponude" nullable="false" primary="false" size="" type="int">
+                        <references refColumn="Tip_Pon_Oznaka" refTable="Tip Ponuda"/>
+                    </column>
+                    <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="false" primary="false" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="Cje_Pon_Naziv" group="0" name="Naziv" nullable="true" primary="false" size="20" type="varchar(20)"/>
+                    <column code="Pon_Usl_Opis" group="0" name="Opis" nullable="true" primary="false" size="" type="text"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <retrieveAll name="usp_PonudaUslugaReadAll()"/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Ukljucene Ponude Usluga" name="Ukljucene Ponude Usluga">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Uklj_Pon_Usl_Oznaka" group="0" name="Oznaka Ukljucene Ponude Usluga" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="Pon_Usl_Oznaka" refTable="Ponuda Usluga"/>
+                    </column>
+                    <column code="Obj_Pon_Usl_Oznaka" group="0" name="Oznaka Objedinjene Ponude Usluga" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="Pon_Usl_Oznaka" refTable="Ponuda Usluga"/>
+                    </column>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Ukljucena dodatna oprema" name="Ukljucena dodatna oprema">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="do_oznaka" group="0" name="Oznaka Dodatne Opreme" nullable="false" primary="true" size="" type="bigint">
+                        <references refColumn="do_oznaka" refTable="Dodatne oprema"/>
+                    </column>
+                    <column code="Pon_Usl_Oznaka" group="0" name="Oznaka Ponude Usluga" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="Pon_Usl_Oznaka" refTable="Ponuda Usluga"/>
+                    </column>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Tip Ponuda" name="Tip Ponuda">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Tip_Pon_Oznaka" group="0" name="Oznaka Tipa Ponude" nullable="false" primary="true" size="" type="int"/>
+                    <column code="Tip_Pon_Naziv" group="0" name="Naziv" nullable="false" primary="false" size="20" type="varchar(20)"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Vremenski raspored" name="Vremenski raspored">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="vras_oznaka" group="0" name="Oznaka Vremenskog Rasporeda" nullable="false" primary="true" size="5" type="varchar(5)"/>
+                    <column code="datum od" group="0" name="datum od" nullable="true" primary="false" size="" type="datetime"/>
+                    <column code="datum do" group="0" name="datum do" nullable="true" primary="false" size="" type="datetime"/>
+                    <column code="vrijeme od" group="0" name="vrijeme od" nullable="true" primary="false" size="" type="datetime"/>
+                    <column code="vrijeme do" group="0" name="vrijeme do" nullable="true" primary="false" size="" type="datetime"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+            </package>
+            <package name="Poslovni Dokumenti">
+                <table code="Subjekti dokumenta" name="Subjekti dokumenta">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="SUBJEKAT_IDENTIFIKTOR" group="0" name="Identifikator Subjekta Dokumenta" nullable="false" primary="true" size="" type="int"/>
+                    <column code="STAVKA_IDENTIFIKATOR" group="0" name="Identifikator Stavke Dokumenta" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="STAVKA_IDENTIFIKATOR" refTable="Stavke dokumenta"/>
+                    </column>
+                    <column code="redni_broj" group="0" name="Redni broj" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="redni_broj" refTable="Stavke dokumenta"/>
+                    </column>
+                    <column code="NZ_PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema Nezaposlenog" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="POS_PS_IDENTIFIKATOR" refTable="EVIDENCIJA_FIZICKIH_LICA"/>
+                    </column>
+                    <column code="FL_IDENTIFIKATOR" group="0" name="Identifikator Fizickih Lica" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="FL_IDENTIFIKATOR" refTable="EVIDENCIJA_FIZICKIH_LICA"/>
+                    </column>
+                    <column code="Z_PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema Zaposlenog" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="REGISTAR_ZAPOSLENIH"/>
+                    </column>
+                    <column code="ZAR_IDENT" group="0" name="Redni broj evidencije" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="ZAR_IDENT" refTable="REGISTAR_ZAPOSLENIH"/>
+                    </column>
+                    <column code="Zaposleni" group="0" name="Zaposleni" nullable="false" primary="false" size="" type="bit"/>
+                    <crud>
+                        <create name= "usp_SubjektiDokumentaCreate(?,?,?,?,?,?,?,?)"/>
+                        <retrieve name= "usp_SubjektiDokumentaRead(?,?,?,?,?,?,?,?)"/>
+                        <retrieveAll name="usp_SubjektiDokumentaReadAll()" />
+                        <retrieveRefValue name="usp_SubjektiDokumentaReadRefValue(?)"/>
+                        <update name= "usp_SubjektiDokumentaUpdate(?,?,?,?,?,?,?,?)"/>
+                        <delete name= "usp_SubjektiDokumentaDelete(?,?,?)"/>
+                    </crud>
+                </table>
+                <table code="Vezani dokument" name="Vezani dokument">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Dok_redni_broj" group="0" name="Redni broj vezanog dokumenta" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="redni_broj" refTable="Dokument poslovanja"/>
+                    </column>
+                    <column code="GL_redni_broj" group="0" name="Redni broj glavnog dokumenta" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="redni_broj" refTable="Dokument poslovanja"/>
+                    </column>
+                    <crud>
+                        <create name= "usp_VezaniDokumentCreate(?,?)"/>
+                        <retrieve name= "usp_VezaniDokumentRead(?,?)"/>
+                        <retrieveAll name="usp_VezaniDokumentReadAll()" />
+                        <update name= "usp_VezaniDokumentUpdate(?,?)"/>
+                        <delete name= "usp_VezaniDokumentDelete(?,?)"/>
+                    </crud>
+                </table>
+                <table code="Status dokumenta" name="Status dokumenta">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Stat_dok_oznaka" group="0" name="Oznaka Statusa Dokumenta" nullable="false" primary="true" size="" type="numeric"/>
+                    <column code="stat_dok_naziv" group="0" name="naziv" nullable="true" primary="false" size="200" type="varchar(200)"/>
+                    <crud>
+                        <create name= "usp_StatusDokumentaCreate(?,?)"/>
+                        <retrieve name= "usp_StatusDokumentaRead(?)"/>
+                        <retrieveAll name="usp_StatusDokumentaReadAll()"/>
+                    	<retrieveRefValue name="usp_StatusDokumentaReadRefValue(?)"/>
+                        <update name="usp_StatusDokumentaUpdate(?,?)"/>
+                        <delete name="usp_StatusDokumentaDelete(?)"/>
+                    </crud>
+                </table>
+                <table code="Stavke dokumenta" name="Stavke dokumenta">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="STAVKA_IDENTIFIKATOR" group="0" name="Identifikator Stavke Dokumenta" nullable="false" primary="true" size="" type="int"/>
+                    <column code="redni_broj" group="0" name="Redni broj" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="redni_broj" refTable="Dokument poslovanja"/>
+                    </column>
+                    <column code="Oznaka Cjenovnika" group="0" name="Oznaka Cjenovnika" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="Oznaka Cjenovnika" refTable="Cjenovnik Ponuda"/>
+                    </column>
+                    <column code="Pon_Usl_Oznaka" group="0" name="Oznaka Ponude Usluga" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="Pon_Usl_Oznaka" refTable="Ponuda Usluga"/>
+                    </column>
+                    <column code="SUBJEKAT_IDENTIFIKTOR" group="0" name="Identifikator Subjekta Dokumenta" nullable="false" primary="false" size="" type="int">
+                        <references refColumn="SUBJEKAT_IDENTIFIKTOR" refTable="Subjekti dokumenta"/>
+                    </column>
+                    <crud>
+                        <create name= "usp_StavkeDokumentaCreate(?,?,?,?,?)"/>
+                        <retrieve name= "usp_StavkeDokumentaRead(?,?,?)"/>
+                        <retrieveAll name="usp_StavkeDokumentaReadAll()"/>
+                        <retrieveRefValue name="usp_StavkeDokumentaReadRefValue(?)"/>
+                        <update name= "usp_StavkeDokumentaUpdate(?,?,?,?,?)"/>
+                        <delete name= "usp_StavkeDokumentaDelete(?,?,?)"/>
+                    </crud>
+                </table>
+                <table code="Tip dokumenta" name="Tip dokumenta">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="td_oznaka" group="0" name="Oznaka Tipa Dokumenta" nullable="false" primary="true" size="2" type="numeric(2)"/>
+                    <column code="Naziv Tipa Dokumenta" group="0" name="Naziv Tipa Dokumenta" nullable="true" primary="false" size="50" type="varchar(50)"/>
+                    <crud>
+                        <create name= "usp_TipDokumentaCreate(?,?)"/>
+                        <retrieve name= "usp_TipDokumentaRead(?,?)"/>
+                        <retrieveRefValue name="usp_TipDokumentaReadRefValue(?)"/>
+                        <retrieveAll name="usp_TipDokumentaReadAll()"/>
+                        <update name= "usp_TipDokumentaUpdate(?,?)"/>
+                        <delete name= "usp_TipDokumentaUpdate(?)"/>
+                    </crud>
+                </table>
+                <table code="Dokument poslovanja" name="Dokument poslovanja">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="true" primary="false" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="false" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                    </column>
+                    <column code="Godina" group="0" name="Godina" nullable="false" primary="false" size="4" type="numeric(4)">
+                        <references refColumn="Godina" refTable="Poslovna godina"/>
+                    </column>
+                    <column code="redni_broj" group="0" name="Redni broj" nullable="false" primary="true" size="" type="int"/>
+                    <column code="td_oznaka" group="0" name="Oznaka Tipa Dokumenta" nullable="false" primary="false" size="2" type="numeric(2)">
+                        <references refColumn="td_oznaka" refTable="Tip dokumenta"/>
+                    </column>
+                    <column code="Stat_dok_oznaka" group="0" name="Oznaka Statusa Dokumenta" nullable="false" primary="false" size="" type="numeric">
+                        <references refColumn="Stat_dok_oznaka" refTable="Status dokumenta"/>
+                    </column>
+                    <column code="datum_kreiranja" group="0" name="Datum kreiranja" nullable="true" primary="false" size="" type="datetime"/>
+                    <crud>
+                        <create name= "usp_DokumentPoslovanjaCreate(?,?,?,?,?,?,?)"/>
+                        <retrieve name= "usp_DokumentPoslovanjaRead(?,?,?,?,?,?)"/>
+                        <retrieveAll name="usp_DokumentPoslovanjaReadAll()"/>
+                        <retrieveRefValue name="usp_DokumentPoslovanjaReadRefVAlue(?)"/>
+                        <update name= "usp_DokumentPoslovanjaUpdate(?,?,?,?,?,?,?)"/>
+                        <delete name= "usp_DokumentPoslovanjaDelete(?,?,?)"/>
+                    </crud>
+                </table>
+                <table code="Poslovna godina" name="Poslovna godina">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                    </column>
+                    <column code="Godina" group="0" name="Godina" nullable="false" primary="true" size="4" type="numeric(4)"/>
+                    <column code="Tekuca" group="0" name="Tekuca" nullable="false" primary="false" size="" type="bit"/>
+                    <crud>
+                        <create name= "usp_PoslovnaGodinaCreate(?,?,?)"/>
+                        <retrieve name= "usp_PoslovnaGodinaRead(?,?,?)"/>
+                        <retrieveAll name="usp_PoslovnaGodinaReadAll()"/>
+                        <retrieveRefValue name="usp_PoslovnaGodinaReadRefValue(?)"/>
+                        <update name= "usp_PoslovnaGodinaUpdate(?,?,?)"/>
+                        <delete name= "usp_PoslovnaGodinaDelete(?)"/>
+                    </crud>
+                </table>
+            </package>
+            <package name="Smještajna Jedinica">
+            	<table code="Smještajna jedinica" name="Smještajna jedinica">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                    </column>
+                    <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="false" primary="true" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="sj_oznaka_smjestajne" group="0" name="Oznaka smjestajne jedinice" nullable="false" primary="true" size="5" type="numeric(5)"/>
+                    <column code="ts_oznaka" group="0" name="Oznaka Tipa Smjestaja" nullable="false" primary="false" size="" type="bigint">
+                        <references refColumn="ts_oznaka" refTable="Tip Smještaja"/>
+                    </column>
+                    <column code="sj_broj" group="0" name="Broj jedinice" nullable="true" primary="false" size="" type="numeric"/>
+                    <column code="sj_opis_jedinice" group="0" name="Opis" nullable="true" primary="false" size="" type="text"/>
+                    <column code="sprat_jedinice" group="0" name="Sprat" nullable="true" primary="false" size="" type="int"/>
+                    <column code="ulaz_jedinice" group="0" name="Ulaz" nullable="true" primary="false" size="5" type="varchar(5)"/>
+                    <column code="sj_slika" group="0" name="slika" nullable="true" primary="false" size="" type="image"/>
+                    <crud>
+                    <create name="usp_SmještajnaJedinicaCreate(?,?,?,?,?,?,?,?)"/>
+                    <retrieve name="usp_SmještajnaJedinicaRead(?,?,?)"/>
+                    <retrieveAll name="usp_SmještajnaJedinicaReadAll(?)"/>
+                    <update name="usp_SmještajnaJedinicaUpdate(?,?,?,?,?,?,?,?,?)"/>
+                    <delete name="usp_SmještajnaJedinicaDelete(?,?,?)"/>
+                    <retrieveRefValue name="usp_SmještajnaJedinicaReadRefValue(?)"/>
+                    </crud>
+                </table>
+                <table code="Sadrzajni smjestaj" name="Sadrzajni smjestaj">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="sj_oznaka_smjestajne" group="0" name="Oznaka Sadrzajne Smjestajne jedinice" nullable="false" primary="true" size="5" type="numeric(5)">
+                        <references refColumn="sj_oznaka_smjestajne" refTable="Smještajna jedinica"/>
+                    </column>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                        
+                    </column>
+                    <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="false" primary="true" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                        
+                    </column>
+                    <column code="sad_sj_oznaka_smjestajne" group="0" name="Oznaka Sadrzane Smjestajne Jedinice" nullable="false" primary="true" size="5" type="numeric(5)">
+                        <references refColumn="sj_oznaka_smjestajne" refTable="Smještajna jedinica"/>
+                    </column>
+                    <crud>
+                        <create name="usp_SadrzajniSmjestajCreate(?,?,?,?)"/>
+                        <retrieve name="usp_SadrzajniSmjestajRead(?,?,?,?)"/>
+                        <retrieveAll name="usp_SadrzajniSmjestajReadAll(?)"/>
+                        <update name="usp_SadrzajniSmjestajUpdate(?,?,?,?)"/>
+                        <delete name="usp_SmještajnaJedinicaDelete(?,?,?,?)"/>
+                    </crud>
+                </table>
+                <table code="Dodatna oprema Smjestajne Jedinice" name="Dodatna oprema Smjestajne Jedinice">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="do_oznaka" group="0" name="Oznaka Dodatne Opreme" nullable="false" primary="true" size="" type="bigint">
+                        <references refColumn="do_oznaka" refTable="Dodatne oprema"/>
+                    </column>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                    </column>
+                    <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="false" primary="true" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="sj_oznaka_smjestajne" group="0" name="Oznaka smjestajne jedinice" nullable="false" primary="true" size="5" type="numeric(5)">
+                        <references refColumn="sj_oznaka_smjestajne" refTable="Smještajna jedinica"/>
+                    </column>
+                    <crud>
+                        <create name="usp_DodatnaOpremaSmjestajneJediniceCreate(?,?,?,?)" />
+                        <retrieve name="usp_DodatnaOpremaSmjestajneJediniceRead(?,?,?,?)"/>
+                        <retrieveAll name="usp_DodatnaOpremaSmjestajneJediniceReadAll(?)"/>
+                        <update name="DodatnaOpremaSmjestajneJediniceUpdate(?,?,?,?)"/>
+                        <delete name="usp_DodatnaOpremaSmjestajneJediniceDelete(?,?,?,?)"/>
+                    </crud>
+                </table>
+                <table code="Tip opreme" name="Tip opreme">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="to_oznaka" group="0" name="Oznaka Tipa Opreme" nullable="false" primary="true" size="5" type="varchar(5)"/>
+                    <column code="to_naziv" group="0" name="naziv" nullable="true" primary="false" size="20" type="varchar(20)"/>
+                    <crud>
+                        <create name="usp_TipOpremeCreate(?,?)"/>
+                    <retrieve name="usp_TipOpremeRead(?)"/>
+                    <retrieveAll name="usp_TipOpremeReadAll()"/>
+                    <update name="usp_TipOpremeUpdate(?,?)"/>
+                    <delete name="usp_TipOpremeDelete(?)"/>
+                    <retrieveRefValue name="usp_TipOpremeReadRefValue(?)"/>
+                    </crud>
+                </table>
+                <table code="Tip Smještaja" name="Tip Smještaja">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="ts_oznaka" group="0" name="Oznaka Tipa Smjestaja" nullable="false" primary="true" size="" type="bigint"/>
+                    <column code="ts_naziv" group="0" name="naziv" nullable="false" primary="false" size="20" type="varchar(20)"/>
+                    <crud>
+	                    <create name="usp_TipSmještajaCreate(?)"/>
+	                   	<retrieve name="usp_TipSmještajaRead(?)"/>
+	                    <retrieveAll name="usp_TipSmještajaReadAll()"/>
+	                    <update name="usp_TipSmještajaUpdate(?,?)"/>
+	                    <delete name="usp_TipSmještajaDelete(?)"/>
+                        <retrieveRefValue name="usp_TipSmještajaReadRefValue(?)"/>
+                    </crud>
+                </table>
+            </package>
+        </package>
+    </package>
+    <package name="Resursi Poslovnog Sistema">
+        <package name="Ljudski Resursi">
+            <table code="KATALOG_RADNIH_MJESTA" name="Katalog radnih mjesta">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="RM_OZNAKA" group="0" name="Oznaka Radnog Mjesta" nullable="false" primary="true" size="4" type="numeric(4,0)"/>
+                <column code="RM_NAZIV" group="0" name="Naziv radnog mjesta" nullable="false" primary="false" size="120" type="varchar(120)"/>
+                <column code="RM_PL_BROJ" group="0" name="Planski broj izvršilaca" nullable="false" primary="false" size="3" type="numeric(3,0)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="SKOLSKE_SPREME" name="Školske spreme">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="OBR_STEPEN" group="0" name="Stepen" nullable="false" primary="true" size="1" type="numeric(1)"/>
+                <column code="OBR_NIVO" group="0" name="Nivo obrazovanja" nullable="false" primary="true" size="" type="smallint">
+                    <references refColumn="OBR_NIVO" refTable="NIVO_OBRAZOVANJA"/>
+                </column>
+                <column code="SKSP_OZNAKA" group="0" name="Oznaka spreme" nullable="false" primary="true" size="" type="smallint"/>
+                <column code="SKSP_NAZIV" group="0" name="Naziv spreme" nullable="false" primary="false" size="80" type="varchar(80)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="NIVO_OBRAZOVANJA" name="Nivo obrazovanja">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="OBR_NIVO" group="0" name="Nivo obrazovanja" nullable="false" primary="true" size="" type="smallint"/>
+                <column code="OBR_NAZIV" group="0" name="Naziv nivoa" nullable="false" primary="false" size="40" type="varchar(40)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="REGISTAR_ZAPOSLENIH" name="Registar zaposlenih">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="ZAR_IDENT" group="0" name="Redni broj evidencije" nullable="false" primary="true" size="" type="int"/>
+                <column code="ZAP_PREZIME" group="0" name="Prezime" nullable="false" primary="false" size="20" type="varchar(20)"/>
+                <column code="ZAP_IME_RODITELJA" group="0" name="Ime roditelja" nullable="true" primary="false" size="20" type="varchar(20)"/>
+                <column code="ZAP_IME" group="0" name="Ime" nullable="false" primary="false" size="20" type="varchar(20)"/>
+                <column code="ZAP_POL" group="0" name="Pol" nullable="false" primary="false" size="1" type="char(1)"/>
+                <column code="ZAP_MATICNI_BROJ" group="0" name="Matični broj" nullable="true" primary="false" size="13" type="varchar(13)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                    <retrieveRefValue name ="usp_RegistarZaposlenihReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="RASPORED_NA_RADNA_MJESTA" name="Raspored na radna mjesta">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="REGISTAR_ZAPOSLENIH"/>
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="KATALOG_RADNIH_MJESTA"/>
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="ORGANIZACIONE_JEDINICE"/>
+                </column>
+                <column code="ZAR_IDENT" group="0" name="Redni broj evidencije" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="ZAR_IDENT" refTable="REGISTAR_ZAPOSLENIH"/>
+                </column>
+                <column code="RASP_RBR" group="0" name="Redni broj" nullable="false" primary="true" size="4" type="numeric(4,0)"/>
+                <column code="RM_OZNAKA" group="0" name="Oznaka Radnog Mjesta" nullable="false" primary="false" size="4" type="numeric(4,0)">
+                    <references refColumn="RM_OZNAKA" refTable="KATALOG_RADNIH_MJESTA"/>
+                </column>
+                <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="true" primary="false" size="4" type="numeric(4)">
+                    <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                </column>
+                <column code="VRO_OZNAKA" group="0" name="Oznaka Vrste Radnog Odnosa" nullable="false" primary="false" size="2" type="char(2)">
+                    <references refColumn="VRO_OZNAKA" refTable="VRSTA_RADNOG_ODNOSA"/>
+                </column>
+                <column code="RASP_OD" group="0" name="Od" nullable="false" primary="false" size="" type="datetime"/>
+                <column code="RASP_DO" group="0" name="Do" nullable="true" primary="false" size="" type="datetime"/>
+                <column code="RASP_STAZ_GODINA" group="0" name="Staž godina" nullable="false" primary="false" size="2" type="numeric(2)"/>
+                <column code="RASP_STAZ_MESECI" group="0" name="Staž meseci" nullable="false" primary="false" size="2" type="numeric(2)"/>
+                <column code="RASP_STAZ_DANA" group="0" name="Staž dana" nullable="false" primary="false" size="2" type="numeric(2)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="KATALOG_ZANIMANJA" name="Katalog zanimanja">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <column code="ZAN_ZANIMANJE" group="0" name="Zanimanje" nullable="false" primary="true" size="" type="int"/>
+                <column code="ZAN_NAZIV" group="0" name="Naziv zanimanja" nullable="false" primary="false" size="80" type="varchar(80)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="PODACI_O_OBRAZOVANJU" name="Podaci o obrazovanju">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="REGISTAR_ZAPOSLENIH"/>
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="ZAR_IDENT" group="0" name="Redni broj evidencije" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="ZAR_IDENT" refTable="REGISTAR_ZAPOSLENIH"/>
+                </column>
+                <column code="OBR_ZAP_RBR" group="0" name="Redni broj" nullable="false" primary="true" size="" type="smallint"/>
+                <column code="OBR_STEPEN" group="0" name="Stepen" nullable="true" primary="false" size="1" type="numeric(1)">
+                    <references refColumn="OBR_STEPEN" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="OBR_NIVO" group="0" name="Nivo obrazovanja" nullable="true" primary="false" size="" type="smallint">
+                    <references refColumn="OBR_NIVO" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="SKSP_OZNAKA" group="0" name="Oznaka spreme" nullable="true" primary="false" size="" type="smallint">
+                    <references refColumn="SKSP_OZNAKA" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="false" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="KATALOG_ZVANJA"/>
+                </column>
+                <column code="ZVA_ZVANJE" group="0" name="Zvanje" nullable="false" primary="false" size="" type="int">
+                    <references refColumn="ZVA_ZVANJE" refTable="KATALOG_ZVANJA"/>
+                </column>
+                <column code="OBR_DATUM_UPISA" group="0" name="Datum upisa" nullable="true" primary="false" size="" type="datetime"/>
+                <column code="OBR_DATUM_ZAVRSETKA" group="0" name="Datum završetka" nullable="true" primary="false" size="" type="datetime"/>
+                <column code="OBR_DATUM_DIPLOMIRANJA" group="0" name="Datum diplomiranja" nullable="true" primary="false" size="" type="datetime"/>
+                <column code="OBR_BROJ_DIPLOME" group="0" name="Broj diplome" nullable="true" primary="false" size="14" type="varchar(14)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="ADRESNI_PODACI" name="Adresni podaci">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="REGISTAR_ZAPOSLENIH"/>
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="ZAR_IDENT" group="0" name="Redni broj evidencije" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="ZAR_IDENT" refTable="REGISTAR_ZAPOSLENIH"/>
+                </column>
+                <column code="ADR_TIP" group="0" name="Tip" nullable="false" primary="true" size="1" type="char(1)"/>
+                <column code="ADR_RBR" group="0" name="Redni broj" nullable="false" primary="true" size="" type="smallint"/>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="false" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="false" primary="false" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="ADR_ULICA" group="0" name="Ulica" nullable="true" primary="false" size="50" type="varchar(50)"/>
+                <column code="ADR_BROJ" group="0" name="Broj" nullable="true" primary="false" size="8" type="varchar(8)"/>
+                <column code="ADR_FIKSNI_TELEFON" group="0" name="Fiksni telefon" nullable="true" primary="false" size="20" type="varchar(20)"/>
+                <column code="ADR_MOBILNI_TELEFON" group="0" name="Mobilni telefon" nullable="true" primary="false" size="20" type="varchar(20)"/>
+                <column code="ADR_ELEKTRONSKA_POSTA" group="0" name="Elektronska pošta" nullable="true" primary="false" size="40" type="varchar(40)"/>
+                <column code="ADR_WEB_STRANICA" group="0" name="Web stranica" nullable="true" primary="false" size="60" type="varchar(60)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="KATALOG_ZVANJA" name="Katalog zvanja">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <column code="ZVA_ZVANJE" group="0" name="Zvanje" nullable="false" primary="true" size="" type="int"/>
+                <column code="ZVA_NAZIV" group="0" name="Naziv" nullable="false" primary="false" size="120" type="varchar(120)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="VRSTA_RADNOG_ODNOSA" name="Vrsta radnog odnosa">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="VRO_OZNAKA" group="0" name="Oznaka Vrste Radnog Odnosa" nullable="false" primary="true" size="2" type="char(2)"/>
+                <column code="VRO_NAZIV" group="0" name="Naziv" nullable="false" primary="false" size="40" type="varchar(40)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="SA_SKOLSKIM_SPREMAMA" name="Sa školskim spremama">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="OBR_STEPEN" group="0" name="Stepen" nullable="false" primary="true" size="1" type="numeric(1)">
+                    <references refColumn="OBR_STEPEN" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="OBR_NIVO" group="0" name="Nivo obrazovanja" nullable="false" primary="true" size="" type="smallint">
+                    <references refColumn="OBR_NIVO" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="SKSP_OZNAKA" group="0" name="Oznaka spreme" nullable="false" primary="true" size="" type="smallint">
+                    <references refColumn="SKSP_OZNAKA" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="KATALOG_RADNIH_MJESTA"/>
+                </column>
+                <column code="RM_OZNAKA" group="0" name="Oznaka Radnog Mjesta" nullable="false" primary="true" size="4" type="numeric(4,0)">
+                    <references refColumn="RM_OZNAKA" refTable="KATALOG_RADNIH_MJESTA"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="POTREBNE_SPREME" name="Potrebne spreme">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="KATALOG_ZANIMANJA"/>
+                </column>
+                <column code="ZAN_ZANIMANJE" group="0" name="Zanimanje" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="ZAN_ZANIMANJE" refTable="KATALOG_ZANIMANJA"/>
+                </column>
+                <column code="OBR_STEPEN" group="0" name="Stepen" nullable="false" primary="true" size="1" type="numeric(1)">
+                    <references refColumn="OBR_STEPEN" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="OBR_NIVO" group="0" name="Nivo obrazovanja" nullable="false" primary="true" size="" type="smallint">
+                    <references refColumn="OBR_NIVO" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="SKSP_OZNAKA" group="0" name="Oznaka spreme" nullable="false" primary="true" size="" type="smallint">
+                    <references refColumn="SKSP_OZNAKA" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="OBRAZUJU_ZA" name="Obrazuju za">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="OBR_STEPEN" group="0" name="Stepen" nullable="false" primary="true" size="1" type="numeric(1)">
+                    <references refColumn="OBR_STEPEN" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="OBR_NIVO" group="0" name="Nivo obrazovanja" nullable="false" primary="true" size="" type="smallint">
+                    <references refColumn="OBR_NIVO" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="SKSP_OZNAKA" group="0" name="Oznaka spreme" nullable="false" primary="true" size="" type="smallint">
+                    <references refColumn="SKSP_OZNAKA" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="LISTA_ZVANJA" name="lista zvanja">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="KATALOG_ZVANJA"/>
+                </column>
+                <column code="ZVA_ZVANJE" group="0" name="Zvanje" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="ZVA_ZVANJE" refTable="KATALOG_ZVANJA"/>
+                </column>
+                <column code="OBR_STEPEN" group="0" name="Stepen" nullable="false" primary="true" size="1" type="numeric(1)">
+                    <references refColumn="OBR_STEPEN" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="OBR_NIVO" group="0" name="Nivo obrazovanja" nullable="false" primary="true" size="" type="smallint">
+                    <references refColumn="OBR_NIVO" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <column code="SKSP_OZNAKA" group="0" name="Oznaka spreme" nullable="false" primary="true" size="" type="smallint">
+                    <references refColumn="SKSP_OZNAKA" refTable="SKOLSKE_SPREME"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="DRZAVLJANSTVA" name="Državljanstva">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="REGISTAR_ZAPOSLENIH"/>
+                </column>
+                <column code="ZAR_IDENT" group="0" name="Redni broj evidencije" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="ZAR_IDENT" refTable="REGISTAR_ZAPOSLENIH"/>
+                </column>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+        </package>
+        <package name="Materijalni Resursi">
+            <package name="Osnovna Sredstva">
+                <table code="Trajni Materijalni Resurs" name="Trajni Materijalni Resurs">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                    </column>
+                    <column code="Tr_resurs_Oznaka" group="0" name="Oznaka Trajnog Materijalnog Resursa" nullable="false" primary="true" size="" type="int"/>
+                    <column code="Tip_Res_Oznaka" group="0" name="Oznaka Tipa Trajnog Resursa" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="Tip_Res_Oznaka" refTable="Tip trajnog resursa"/>
+                    </column>
+                    <column code="Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)"/>
+                    <column code="Datum registracije" group="0" name="Datum registracije" nullable="false" primary="false" size="" type="datetime"/>
+                    <column code="Registrovan do" group="0" name="Registrovan do" nullable="true" primary="false" size="" type="datetime"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Tip trajnog resursa" name="Tip trajnog resursa">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Tip_Res_Oznaka" group="0" name="Oznaka Tipa Trajnog Resursa" nullable="false" primary="true" size="" type="int"/>
+                    <column code="Naziv" group="0" name="Naziv" nullable="true" primary="false" size="50" type="varchar(50)"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Organizacija trajnih resursa" name="Organizacija trajnih resursa">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Tr_resurs_Oznaka" group="0" name="Oznaka Trajnog Materijalnog Resursa" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="Tr_resurs_Oznaka" refTable="Trajni Materijalni Resurs"/>
+                    </column>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="ORGANIZACIONE_JEDINICE"/>
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="Trajni Materijalni Resurs"/>
+                    </column>
+                    <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="false" primary="true" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+            </package>
+            <package name="Sitan Inventar">
+                <table code="Skladiste resursa" name="Skladiste resursa">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Skl_Res_Oznaka" group="0" name="Oznaka Skladista Resursa" nullable="false" primary="true" size="" type="int"/>
+                    <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="Smještajna jedinica"/>
+                        <references refColumn="PS_IDENTIFIKATOR" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="true" primary="false" size="4" type="numeric(4)">
+                        <references refColumn="OJ_OZNAKA" refTable="Smještajna jedinica"/>
+                        <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                    </column>
+                    <column code="sj_oznaka_smjestajne" group="0" name="Oznaka smjestajne jedinice" nullable="true" primary="false" size="5" type="numeric(5)">
+                        <references refColumn="sj_oznaka_smjestajne" refTable="Smještajna jedinica"/>
+                    </column>
+                    <column code="Tip_Skl_Oznaka" group="0" name="Oznaka Tipa Skladista" nullable="false" primary="false" size="" type="int">
+                        <references refColumn="Tip_Skl_Oznaka" refTable="Tip skladista"/>
+                    </column>
+                    <column code="Skl_Res_Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Potrosni resurs" name="Potrosni resurs">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Pot_Res_Oznaka" group="0" name="Oznaka Potrosnog Resursa" nullable="false" primary="true" size="" type="int"/>
+                    <column code="Pot_Res_Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)"/>
+                    <column code="Pot_Res_Opis" group="0" name="Opis" nullable="true" primary="false" size="" type="text"/>
+                    <column code="Pot_Res_Slika" group="0" name="Slika" nullable="true" primary="false" size="" type="image"/>
+                    <column code="Tip_Pot_Res_Oznaka" group="0" name="Oznaka Tipa Potrosnog Resursa" nullable="true" primary="false" size="" type="int">
+                        <references refColumn="Tip_Pot_Res_Oznaka" refTable="Tip Potrosnog Resursa"/>
+                    </column>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Tip Potrosnog Resursa" name="Tip Potrosnog Resursa">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Tip_Pot_Res_Oznaka" group="0" name="Oznaka Tipa Potrosnog Resursa" nullable="false" primary="true" size="" type="int"/>
+                    <column code="Tip_Pot_Res_Naziv" group="0" name="Naziv" nullable="true" primary="false" size="50" type="varchar(50)"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Tip skladista" name="Tip skladista">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Tip_Skl_Oznaka" group="0" name="Oznaka Tipa Skladista" nullable="false" primary="true" size="" type="int"/>
+                    <column code="Tip_Skl_Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+                <table code="Stanje Skladista" name="Stanje Skladista">
+                    <groups>
+                        <group id="0" name="Ime grupe"/>
+                    </groups>
+                    <column code="Pot_Res_Oznaka" group="0" name="Oznaka Potrosnog Resursa" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="Pot_Res_Oznaka" refTable="Potrosni resurs"/>
+                    </column>
+                    <column code="Skl_Res_Oznaka" group="0" name="Oznaka Skladista Resursa" nullable="false" primary="true" size="" type="int">
+                        <references refColumn="Skl_Res_Oznaka" refTable="Skladiste resursa"/>
+                    </column>
+                    <column code="Sta_Skl_Kolicina_Resursa" group="0" name="Kolicina Resursa" nullable="false" primary="false" size="4" type="numeric(4)"/>
+                    <crud>
+                        <create/>
+                        <retrieve/>
+                        <update/>
+                        <delete/>
+                    </crud>
+                </table>
+            </package>
+        </package>
+        <package name="Poslovni Partneri i Saradnici">
+            <table code="TIP_PARTNERSTVA" name="Tip partnerstva">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="TP_OZNAKA" group="0" name="Tip partnerstva" nullable="false" primary="true" size="2" type="char(2)"/>
+                <column code="TP_NAZIV" group="0" name="Naziv tipa partnerstva" nullable="false" primary="false" size="40" type="varchar(40)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="VALUTE" name="Valute">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="VAL_OZNAKA" group="0" name="Oznaka valute" nullable="false" primary="true" size="4" type="char(4)"/>
+                <column code="VAL_NAZIV" group="0" name="Naziv valute" nullable="true" primary="false" size="20" type="varchar(20)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="EVIDENCIJA_FIZICKIH_LICA" name="Evidencija fizičkih lica">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="POS_PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="FL_IDENTIFIKATOR" group="0" name="Identifikator Fizickih Lica" nullable="false" primary="true" size="" type="int"/>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="false" primary="false" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="false" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <column code="FL_PREZIME" group="0" name="Prezime" nullable="false" primary="false" size="20" type="varchar(20)"/>
+                <column code="FL_IME_RODITELJA" group="0" name="Ime roditelja" nullable="true" primary="false" size="20" type="varchar(20)"/>
+                <column code="FL_IME" group="0" name="Ime" nullable="false" primary="false" size="20" type="varchar(20)"/>
+                <column code="FL_POL" group="0" name="Pol" nullable="false" primary="false" size="1" type="char(1)"/>
+                <column code="FL_DATEVID" group="0" name="Datum evidentiranja" nullable="false" primary="false" size="" type="datetime"/>
+                <column code="FL_MATICNI_BROJ" group="0" name="Matični broj" nullable="true" primary="false" size="13" type="varchar(13)"/>
+                <column code="FL_FIKSNI" group="0" name="Fiksni telefon" nullable="true" primary="false" size="20" type="varchar(20)"/>
+                <column code="FL_MOBILNI" group="0" name="Mobilni telefon" nullable="true" primary="false" size="20" type="varchar(20)"/>
+                <column code="FL_EMAIL" group="0" name="Elektronska pošta" nullable="true" primary="false" size="30" type="varchar(30)"/>
+                <column code="FL_WWW" group="0" name="Personalna stranica" nullable="true" primary="false" size="80" type="varchar(80)"/>
+                <column code="FL_ADRESA" group="0" name="Adresa" nullable="true" primary="false" size="120" type="varchar(120)"/>
+                <column code="FL_DATUM_RODJENJA" group="0" name="Datum rodjena" nullable="true" primary="false" size="" type="datetime"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                    <retrieveRefValue name ="usp_EvidencijaFizičkihLicaReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="POSLOVNI_ODNOSI" name="Poslovni odnosi">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="false" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="%TABLE%_PK" group="0" name="%TABLE%_PK" nullable="false" primary="false" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="TP_OZNAKA" group="0" name="Tip partnerstva" nullable="false" primary="false" size="2" type="char(2)">
+                    <references refColumn="TP_OZNAKA" refTable="TIP_PARTNERSTVA"/>
+                </column>
+                <column code="TPO_OD" group="0" name="Od" nullable="false" primary="false" size="" type="datetime"/>
+                <column code="TPO_DO" group="0" name="Do" nullable="true" primary="false" size="" type="datetime"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="TEKUCI_RACUNI" name="Tekući računi">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="false" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="%TABLE%_PK" group="0" name="%TABLE%_PK" nullable="false" primary="false" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="VAL_OZNAKA" group="0" name="Oznaka valute" nullable="false" primary="false" size="4" type="char(4)">
+                    <references refColumn="VAL_OZNAKA" refTable="VALUTE"/>
+                </column>
+                <column code="ZIRO_VRSTA" group="0" name="Vrsta računa" nullable="false" primary="false" size="1" type="char(1)"/>
+                <column code="ZIRO_BROJ_RACUNA" group="0" name="Broj računa" nullable="false" primary="false" size="30" type="varchar(30)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="ODNOSI_SA_FIZICKIM_LICIMA" name="Odnosi sa fizičkim licima">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="POS_PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="false" size="" type="int">
+                    <references refColumn="POS_PS_IDENTIFIKATOR" refTable="EVIDENCIJA_FIZICKIH_LICA"/>
+                </column>
+                <column code="FL_IDENTIFIKATOR" group="0" name="Identifikator Fizickih Lica" nullable="false" primary="false" size="" type="int">
+                    <references refColumn="FL_IDENTIFIKATOR" refTable="EVIDENCIJA_FIZICKIH_LICA"/>
+                </column>
+                <column code="TP_OZNAKA" group="0" name="Tip partnerstva" nullable="false" primary="false" size="2" type="char(2)">
+                    <references refColumn="TP_OZNAKA" refTable="TIP_PARTNERSTVA"/>
+                </column>
+                <column code="SSO_OD" group="0" name="Od" nullable="false" primary="false" size="" type="datetime"/>
+                <column code="SSO_DO" group="0" name="Do" nullable="true" primary="false" size="" type="datetime"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="DOMICILNA_ZA_DRZAVE" name="Domicilna za države">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="VAL_OZNAKA" group="0" name="Oznaka valute" nullable="false" primary="true" size="4" type="char(4)">
+                    <references refColumn="VAL_OZNAKA" refTable="VALUTE"/>
+                </column>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+        </package>
+    </package>
+    <package name="Organizaciona Struktura">
+        <package name="Teritorijalno Politička Organizacija">
+            <table code="DRZAVA" name="Država">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="DUR_OZNAKA" group="0" name="Oznaka Drzavnog Uredjenja" nullable="true" primary="false" size="1" type="char(1)">
+                    <references refColumn="DUR_OZNAKA" refTable="DRZAVNO_UREDJENJE"/>
+                </column>
+                <column code="DR_NAZIV" group="0" name="Naziv" nullable="false" primary="false" size="120" type="varchar(120)"/>
+                <column code="DR_GRB" group="0" name="Grb" nullable="true" primary="false" size="" type="image"/>
+                <column code="DR_HIMNA" group="0" name="Himna" nullable="true" primary="false" size="" type="image"/>
+                <column code="DR_ZASTAVA" group="0" name="Zastava" nullable="true" primary="false" size="" type="image"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                    <retrieveRefValue name="usp_DržavaReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="REGION" name="Region">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="TR_OZNAKA_TIPA" group="0" name="Oznaka tipa" nullable="false" primary="true" size="1" type="char(1)">
+                    <references refColumn="TR_OZNAKA_TIPA" refTable="TIPOVI_REGIONA"/>
+                </column>
+                <column code="RE_OZNAKA_REGIONA" group="0" name="Oznaka regiona" nullable="false" primary="true" size="" type="int"/>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="true" primary="false" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                    <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="RE_NAZIV_REGIONA" group="0" name="Naziv regiona" nullable="false" primary="false" size="120" type="varchar(120)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="TIPOVI_REGIONA" name="Tipovi regiona">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="TR_OZNAKA_TIPA" group="0" name="Oznaka tipa" nullable="false" primary="true" size="1" type="char(1)"/>
+                <column code="TR_NAZIV_TIPA" group="0" name="Naziv tipa" nullable="false" primary="false" size="60" type="varchar(60)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="NASELJENA_MJESTA" name="Naseljena mjesta">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="false" primary="true" size="" type="int"/>
+                <column code="NM_NAZIV_MESTA" group="0" name="Naziv mesta" nullable="false" primary="false" size="60" type="varchar(60)"/>
+                <column code="NM_PTT_OZNAKA" group="0" name="PTT oznaka" nullable="true" primary="false" size="12" type="varchar(12)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                    <retrieveRefValue name="usp_NaseljenaMjestaReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="OPSTINA" name="Opština">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                    <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="OP_OZNAKA_OPSTINE" group="0" name="Oznaka opštine" nullable="false" primary="true" size="3" type="numeric(3,0)"/>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="OP_NAZIV_OPSTINE" group="0" name="Naziv opštine" nullable="false" primary="false" size="60" type="varchar(60)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="MJESNA_ZAJEDNICA" name="Mjesna zajednica">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="OPSTINA"/>
+                    <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="OP_OZNAKA_OPSTINE" group="0" name="Oznaka opštine" nullable="false" primary="true" size="3" type="numeric(3,0)">
+                    <references refColumn="OP_OZNAKA_OPSTINE" refTable="OPSTINA"/>
+                </column>
+                <column code="MZ_IDENTIFIKATOR" group="0" name="Identifikator" nullable="false" primary="true" size="2" type="numeric(2,0)"/>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="MZ_NAZIV_MJESNE_ZAJEDNICE" group="0" name="Naziv mjesne zajednice" nullable="false" primary="false" size="80" type="varchar(80)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="SASTAV_DRZAVE" name="Sastav države">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <column code="CL_REDNI_BROJ" group="0" name="Redni broj" nullable="false" primary="true" size="3" type="numeric(3,0)"/>
+                <column code="DRZ_DR_OZNAKA" group="0" name="Oznaka Drzave Clanice" nullable="false" primary="false" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <column code="CL_OD" group="0" name="Od" nullable="false" primary="false" size="" type="datetime"/>
+                <column code="CL_DO" group="0" name="Do" nullable="true" primary="false" size="" type="datetime"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="DRZAVNO_UREDJENJE" name="Drzavno uredjenje">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DUR_OZNAKA" group="0" name="Oznaka" nullable="false" primary="true" size="1" type="char(1)"/>
+                <column code="DUR_NAZIV" group="0" name="Naziv" nullable="false" primary="false" size="40" type="varchar(40)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="ISTORIJA_UREDJENJA" name="Istorija uredjenja">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <column code="URE_BROJ" group="0" name="Broj" nullable="false" primary="true" size="2" type="numeric(2)"/>
+                <column code="DUR_OZNAKA" group="0" name="Oznaka Drzavnog Uredjenja" nullable="false" primary="false" size="1" type="char(1)">
+                    <references refColumn="DUR_OZNAKA" refTable="DRZAVNO_UREDJENJE"/>
+                </column>
+                <column code="URE_OD_KADA" group="0" name="Od kada" nullable="false" primary="false" size="" type="datetime"/>
+                <column code="URE_DO_KADA" group="0" name="Do kada" nullable="true" primary="false" size="" type="datetime"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="PRAVNI_NASLJEDNIK" name="Pravni nasljednik">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DRZ_DR_OZNAKA" group="0" name="Oznaka Nasljednika" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Sljedbenika" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="OBUHVATA_NASELJA" name="Obuhvata naselja">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="TR_OZNAKA_TIPA" group="0" name="Oznaka tipa" nullable="false" primary="true" size="1" type="char(1)">
+                    <references refColumn="TR_OZNAKA_TIPA" refTable="REGION"/>
+                </column>
+                <column code="RE_OZNAKA_REGIONA" group="0" name="Oznaka regiona" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="RE_OZNAKA_REGIONA" refTable="REGION"/>
+                </column>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="OBUHVATA_OPSTINE" name="Obuhvata opštine">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="OPSTINA"/>
+                    <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="OP_OZNAKA_OPSTINE" group="0" name="Oznaka opštine" nullable="false" primary="true" size="3" type="numeric(3,0)">
+                    <references refColumn="OP_OZNAKA_OPSTINE" refTable="OPSTINA"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="SASTAV_REGIONA" name="Sastav regiona">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="REG_TR_OZNAKA_TIPA" group="0" name="Oznaka Tipa Sastava Regiona" nullable="false" primary="true" size="1" type="char(1)">
+                    <references refColumn="TR_OZNAKA_TIPA" refTable="REGION"/>
+                </column>
+                <column code="REG_RE_OZNAKA_REGIONA" group="0" name="Oznaka Sastava Regiona" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="RE_OZNAKA_REGIONA" refTable="REGION"/>
+                </column>
+                <column code="TR_OZNAKA_TIPA" group="0" name="Oznaka tipa regiona" nullable="false" primary="true" size="1" type="char(1)">
+                    <references refColumn="TR_OZNAKA_TIPA" refTable="REGION"/>
+                </column>
+                <column code="RE_OZNAKA_REGIONA" group="0" name="Oznaka regiona" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="RE_OZNAKA_REGIONA" refTable="REGION"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="MJESNO_POKRIVANJE_NASELJA" name="Mjesno pokrivanje naselja">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="OP_OZNAKA_OPSTINE" group="0" name="Oznaka opštine" nullable="false" primary="true" size="3" type="numeric(3,0)">
+                    <references refColumn="OP_OZNAKA_OPSTINE" refTable="MJESNA_ZAJEDNICA"/>
+                </column>
+                <column code="MZ_IDENTIFIKATOR" group="0" name="Identifikator" nullable="false" primary="true" size="2" type="numeric(2,0)">
+                    <references refColumn="MZ_IDENTIFIKATOR" refTable="MJESNA_ZAJEDNICA"/>
+                </column>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="true" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                    <references refColumn="DR_OZNAKA" refTable="MJESNA_ZAJEDNICA"/>
+                </column>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+        </package>
+        <package name="Unutrašnja Organizacija">
+            <table code="POSLOVNI_SISTEM" name="Poslovni sistem">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                </column>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="false" primary="false" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="DRZAVA"/>
+                  <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/> 
+                </column>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="false" primary="false" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="PN_PS_IDENTIFIKATOR" group="0" name="Identifikator Pravnog Nasljednika" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="PS_NAZIV" group="0" name="Naziv" nullable="false" primary="false" size="120" type="varchar(120)"/>
+                <column code="ADRESA" group="0" name="Adresa" nullable="true" primary="false" size="40" type="varchar(40)"/>
+                <column code="EMAIL2" group="0" name="email" nullable="true" primary="false" size="40" type="varchar(40)"/>
+                <column code="WWW" group="0" name="www" nullable="true" primary="false" size="120" type="varchar(120)"/>
+                <column code="REGISTRACIONI_BROJ" group="0" name="Registracioni broj" nullable="true" primary="false" size="10" type="char(10)"/>
+                <column code="PIB" group="0" name="PIB" nullable="true" primary="false" size="11" type="char(11)"/>
+                <column code="DATUM_REGISTRACIJE" group="0" name="Datum registracije" nullable="true" primary="false" size="" type="datetime"/>
+                <column code="DO_KADA_JE_POSTOJALA" group="0" name="Do kada je postojala" nullable="true" primary="false" size="" type="datetime"/>
+                <column code="MEMORANDUM" group="0" name="Memorandum" nullable="true" primary="false" size="" type="image"/>
+                <crud>
+                    <create name="usp_PoslovniSistemCreate(?,?,?,?,?,?,?,?,?,?,?,?)"/>
+                    <retrieve name="usp_PoslovniSistemRead(?)"/>
+                    <retrieveAll name="usp_PoslovniSistemReadAll(?)"/>
+                    <update name="usp_PoslovniSistemUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?)"/>
+                    <delete name="usp_PoslovniSistemDelete(?)"/>
+                    <retrieveRefValue name="usp_PoslovniSistemReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="ORGANIZACIONE_JEDINICE" name="Organizacione jedinice">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"></references>
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="TIP_JEDINICE"></references>
+                </column>
+                <column code="OJ_OZNAKA" group="0" name="Oznaka jedinice" nullable="false" primary="true" size="4" type="numeric(4)"/>
+                <column code="JED_TIP" group="0" name="Tip" nullable="false" primary="false" size="2" type="char(2)">
+                    <references refColumn="JED_TIP" refTable="TIP_JEDINICE"/>
+                </column>
+                <column code="DR_OZNAKA" group="0" name="Oznaka Drzave" nullable="true" primary="false" size="3" type="char(3)">
+                    <references refColumn="DR_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="NM_OZNAKA" group="0" name="Oznaka Naseljenog Mjesta" nullable="true" primary="false" size="" type="int">
+                    <references refColumn="NM_OZNAKA" refTable="NASELJENA_MJESTA"/>
+                </column>
+                <column code="OJ_NAZIV" group="0" name="Naziv organizacije" nullable="false" primary="false" size="80" type="varchar(80)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <retrieveAll name="usp_OrganizacioneJediniceReadAll(?)"/>
+                    <update/>
+                    <delete/>
+                    <retrieveRefValue name="usp_OrganizacioneJediniceReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="TIP_JEDINICE" name="Tip jedinice">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="JED_TIP" group="0" name="Tip" nullable="false" primary="true" size="2" type="char(2)"/>
+                <column code="JED_NAZIV_TIPA" group="0" name="Naziv tipa" nullable="false" primary="false" size="60" type="varchar(60)"/>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                    <retrieveRefValue name="usp_TipJediniceReadRefValue(?)"/>
+                </crud>
+            </table>
+            <table code="SLOZENI_POSLOVNI_SISTEM" name="Složeni poslovni sistem">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="POD_PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Podsistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <column code="NAD_PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Nadsistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="POSLOVNI_SISTEM"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+            <table code="SASTAV_JEDINICE" name="Sastav jedinice">
+                <groups>
+                    <group id="0" name="Ime grupe"/>
+                </groups>
+                <column code="DIO_PS_IDENTIFIKATOR" group="0" name="Identifikator PS Dijela Jedinice" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="ORGANIZACIONE_JEDINICE"/>
+                </column>
+                <column code="DIO_OJ_OZNAKA" group="0" name="Oznaka Dijela jedinice" nullable="false" primary="true" size="4" type="numeric(4)">
+                    <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                </column>
+                <column code="PS_IDENTIFIKATOR" group="0" name="Identifikator Poslovnog Sistema" nullable="false" primary="true" size="" type="int">
+                    <references refColumn="PS_IDENTIFIKATOR" refTable="ORGANIZACIONE_JEDINICE"/>
+                </column>
+                <column code="OJ_OZNAKA" group="0" name="Oznaka Slozene Jdinice" nullable="false" primary="true" size="4" type="numeric(4)">
+                    <references refColumn="OJ_OZNAKA" refTable="ORGANIZACIONE_JEDINICE"/>
+                </column>
+                <crud>
+                    <create/>
+                    <retrieve/>
+                    <update/>
+                    <delete/>
+                </crud>
+            </table>
+        </package>
+    </package>
+</database>
